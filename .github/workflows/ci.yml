@@ -1,0 +1,96 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+# Least privilege by default; the deploy job asks for what Pages needs.
+permissions:
+  contents: read
+
+# One Pages deployment at a time. `cancel-in-progress: false` because a
+# half-finished deployment is worse than a queued one.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  # The runnability contract, enforced. The course claims these commands work on
+  # a clean checkout; this job is what makes that claim falsifiable rather than
+  # aspirational. It runs on every push and PR, not only before a deploy.
+  case-study:
+    name: case study — clean checkout must build, run and pass
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: case-study
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          # Pinned to the version every result in the course was verified on.
+          # A newer Node is not automatically a safe substitute here: two of the
+          # experiments assert runtime behaviour (Temporal is absent, an ESM
+          # specifier is not extension-guessed) that a future release could move.
+          node-version: '24.18.0'
+          cache: npm
+          cache-dependency-path: case-study/package-lock.json
+
+      # `npm ci` rather than `npm install`: it installs exactly the lockfile and
+      # fails if package.json and the lock have drifted, which is the check we
+      # want on a case study whose whole point is reproducibility.
+      - run: npm ci
+
+      - name: Build the reference consumer
+        run: npm run build
+
+      - name: The one config here that describes a real host
+        run: node packages/consumer/dist/index.js
+
+      - name: The flip-one-option matrix, as assertions
+        run: npm test
+
+  build:
+    name: build docs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24.18.0'
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - run: npm ci
+
+      # Type-checks content collections and frontmatter against Starlight's
+      # schema, so a malformed unit fails here rather than rendering wrongly.
+      - run: npm run check
+
+      - run: npm run build
+
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: dist
+
+  deploy:
+    name: deploy to GitHub Pages
+    # Only from main, and only once the docs build AND the case study are green.
+    # Publishing a site that documents commands which no longer run is the
+    # specific failure this ordering exists to prevent.
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    needs: [build, case-study]
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5

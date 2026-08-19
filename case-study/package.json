@@ -1,0 +1,17 @@
+{
+  "name": "host-mismatch",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "One source tree, six host descriptions. Flip one compiler option at a time and record what breaks.",
+  "workspaces": ["packages/*"],
+  "scripts": {
+    "build": "tsc -p packages/consumer",
+    "experiments": "node experiments/run.mjs",
+    "test": "node --test experiments/matrix.test.mjs"
+  },
+  "devDependencies": {
+    "@types/node": "26.2.0",
+    "typescript": "7.0.2"
+  }
+}

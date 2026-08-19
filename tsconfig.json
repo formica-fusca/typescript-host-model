@@ -1,0 +1,11 @@
+{
+  "extends": "astro/tsconfigs/strict",
+  "include": [".astro/types.d.ts", "**/*"],
+  // `case-study/` is a separate npm workspace with its own tsconfig, its own
+  // pinned TypeScript (7.0.2) and its own module settings. Type-checking it from
+  // here would check the course's code against a *different* host description
+  // than the course specifies — which is the exact mistake unit 07 is about.
+  // It also fails outright unless case-study/node_modules happens to be
+  // installed, which is state the docs CI job does not have.
+  "exclude": ["dist", "case-study"]
+}

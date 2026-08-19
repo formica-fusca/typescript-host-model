@@ -1,0 +1,12 @@
+{
+  "name": "dual-lib",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A published-shaped package with a conditional exports map. Hand-written on purpose: these files are the artifact, so there is no build step to confuse the experiment. It declares no type field — the .mjs and .cjs extensions state each file's format outright, which is the rule from unit 03.",
+  "exports": {
+    ".": {
+      "import": { "types": "./esm.d.mts", "default": "./esm.mjs" },
+      "require": { "types": "./cjs.d.cts", "default": "./cjs.cjs" }
+    }
+  }
+}

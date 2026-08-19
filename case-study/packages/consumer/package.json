@@ -1,0 +1,8 @@
+{
+  "name": "consumer",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "The reference consumer: the one configuration in this case study that describes a host that actually exists.",
+  "dependencies": { "dual-lib": "1.0.0" }
+}

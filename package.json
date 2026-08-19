@@ -1,0 +1,33 @@
+{
+  "name": "typescript-host-model",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "case-study": "npm --prefix case-study test",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/starlight": "^0.41.7",
+    "astro": "^7.1.6",
+    "sharp": "^0.35.3"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "typescript": "^6.0.3"
+  },
+  "description": "A course on the four TypeScript compiler options that describe a runtime \u2014 target, lib, module and moduleResolution.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/formica-fusca/typescript-host-model.git"
+  },
+  "overrides": {
+    "@astrojs/markdown-satteri": {
+      "satteri": "0.10.3"
+    }
+  }
+}

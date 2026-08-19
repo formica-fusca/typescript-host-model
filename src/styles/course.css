@@ -1,0 +1,14 @@
+/* The course leans on wide tables (the option/job matrix, the resolver
+   comparison) and on long verbatim compiler output. Both need to scroll inside
+   their own box rather than pushing the page sideways. */
+.sl-markdown-content table {
+  display: block;
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+/* Purpose blockquotes open every unit. Give them a little more presence than a
+   generic quote so they read as the unit's contract with the reader. */
+.sl-markdown-content blockquote {
+  border-inline-start-color: var(--sl-color-accent);
+}

@@ -1,0 +1,106 @@
+---
+title: Describing the host
+description: A course on the four TypeScript compiler options that describe a runtime — target, lib, module and moduleResolution — and what happens when the description is wrong.
+template: splash
+hero:
+  tagline: >-
+    Four lines near the top of every tsconfig.json, and almost nobody chose them.
+    They are not build settings. They are a description of a machine that is not
+    present, and the compiler believes every word of it.
+  actions:
+    - text: Start with the case study
+      link: case-study/
+      icon: right-arrow
+    - text: Read the syllabus
+      link: syllabus/
+      variant: minimal
+    - text: View on GitHub
+      link: https://github.com/formica-fusca/typescript-host-model
+      icon: external
+      variant: minimal
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+<CardGrid>
+  <Card title="target" icon="seti:typescript">
+    What syntax the host's parser accepts. The only one of the four whose effect
+    you can read straight out of the emitted file.
+  </Card>
+  <Card title="lib" icon="warning">
+    What already exists at runtime. A claim nothing verifies — and the one whose
+    default quietly ships a browser into Node projects.
+  </Card>
+  <Card title="module" icon="document">
+    What module format is emitted. Under `nodenext` it stops answering and
+    delegates to `package.json`.
+  </Card>
+  <Card title="moduleResolution" icon="magnifier">
+    How a specifier string becomes a file. An imitation of a real host's
+    algorithm, chosen by you.
+  </Card>
+</CardGrid>
+
+## The word "host"
+
+A **host** is whatever will load and run the emitted JavaScript. Concretely it is
+three things bundled together:
+
+1. a **syntax level** — what the parser accepts (`?.`, `#private`, top-level
+   `await`);
+2. a **standard library** — what already exists at runtime (`Map`,
+   `Array.prototype.findLast`, `structuredClone`, `document`);
+3. a **module system** — how a file declares its imports, and how a specifier
+   string is turned into a file on disk.
+
+Node 24 is a host. Chrome 141 is a host. A Cloudflare Worker is a host. A bundler
+is a *pretend* host: it resolves and links like one, then hands the result to a
+real one — which is why a project can have two hosts disagreeing about the same
+source tree.
+
+TypeScript never inspects the host. It cannot: the host is not present at compile
+time, it may be several different hosts, and it may not exist yet. So the
+compiler works from a **description** you supply, and these four options are that
+description — one for the syntax level, one for the standard library, and two for
+the module system.
+
+Nothing verifies the description. That single fact generates every failure this
+course is about.
+
+> **A collision worth defusing now.** TypeScript's own API uses "Host" for the
+> opposite thing. `CompilerHost`, `ModuleResolutionHost` and `LanguageServiceHost`
+> are interfaces of `fileExists` / `readFile` — they describe the environment the
+> **compiler itself** runs in, the thing that hands `tsc` bytes off a disk. That
+> host is where compilation *happens*; ours is where the output *ends up*. The
+> course always means the second one, and says "compiler host" in full on the rare
+> occasions it means the first.
+
+## General objective
+
+By the end you can read those four lines in a `tsconfig.json` you have never seen
+and predict, without running anything: **what syntax will be emitted, which
+globals will typecheck, what module format each file receives, and which file a
+given specifier resolves to.**
+
+And in reverse — the half that pays off during an incident. Given a symptom, you
+can name which option described a host that does not exist:
+
+| Symptom | Which claim was false |
+| --- | --- |
+| `x.findLast is not a function`, compiled clean | `lib` promised a standard library the runtime does not have |
+| `Cannot find name 'document'` — or worse, *no* error in a Node service | `lib`, via a default nobody set |
+| `ERR_MODULE_NOT_FOUND` after a green build | `moduleResolution` modelled a different file-lookup algorithm than the runtime uses |
+| `Unexpected token` in a consumer's build | `target` emitted syntax the consumer's host cannot parse |
+
+The secondary objective is a habit rather than a fact: **check the value list
+against the compiler in front of you.** Two of these four options have had values
+*removed* recently — `es5` is no longer a legal `target`, and `node10` is no
+longer a legal `moduleResolution` — which quietly invalidates most published
+advice on the subject, including advice that is otherwise correct.
+
+---
+
+Every claim in this course was produced by a throwaway file and a compiler
+invocation, pinned to **TypeScript 7.0.2** on **Node 24.18.0**. Several
+first-draft claims did not survive that check, and one open question is recorded
+as open rather than answered.
