@@ -16,7 +16,7 @@ export default defineConfig({
   trailingSlash: "always",
   integrations: [
     starlight({
-      title: "Describing the host",
+      title: "Describing the runtime host",
       description:
         "The four TypeScript compiler options that describe a runtime — target, lib, module and moduleResolution — and what happens when the description is wrong.",
       social: [
@@ -34,10 +34,7 @@ export default defineConfig({
       sidebar: [
         {
           label: "Start here",
-          items: [
-            { slug: "start-here" },
-            { slug: "syllabus" },
-          ],
+          items: [{ slug: "start-here" }, { slug: "syllabus" }],
         },
         {
           label: "The exercise",

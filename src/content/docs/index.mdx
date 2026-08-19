@@ -1,5 +1,5 @@
 ---
-title: Describing the host
+title: Describing the runtime host
 description: A course on the four TypeScript compiler options that describe a runtime — target, lib, module and moduleResolution — and what happens when the description is wrong.
 template: splash
 hero:
@@ -20,7 +20,7 @@ hero:
       variant: minimal
 ---
 
-import { Card, CardGrid } from '@astrojs/starlight/components';
+import { Card, CardGrid } from "@astrojs/starlight/components";
 
 <CardGrid>
   <Card title="target" icon="seti:typescript">
@@ -54,7 +54,7 @@ three things bundled together:
    string is turned into a file on disk.
 
 Node 24 is a host. Chrome 141 is a host. A Cloudflare Worker is a host. A bundler
-is a *pretend* host: it resolves and links like one, then hands the result to a
+is a _pretend_ host: it resolves and links like one, then hands the result to a
 real one — which is why a project can have two hosts disagreeing about the same
 source tree.
 
@@ -71,7 +71,7 @@ course is about.
 > opposite thing. `CompilerHost`, `ModuleResolutionHost` and `LanguageServiceHost`
 > are interfaces of `fileExists` / `readFile` — they describe the environment the
 > **compiler itself** runs in, the thing that hands `tsc` bytes off a disk. That
-> host is where compilation *happens*; ours is where the output *ends up*. The
+> host is where compilation _happens_; ours is where the output _ends up_. The
 > course always means the second one, and says "compiler host" in full on the rare
 > occasions it means the first.
 
@@ -85,16 +85,16 @@ given specifier resolves to.**
 And in reverse — the half that pays off during an incident. Given a symptom, you
 can name which option described a host that does not exist:
 
-| Symptom | Which claim was false |
-| --- | --- |
-| `x.findLast is not a function`, compiled clean | `lib` promised a standard library the runtime does not have |
-| `Cannot find name 'document'` — or worse, *no* error in a Node service | `lib`, via a default nobody set |
-| `ERR_MODULE_NOT_FOUND` after a green build | `moduleResolution` modelled a different file-lookup algorithm than the runtime uses |
-| `Unexpected token` in a consumer's build | `target` emitted syntax the consumer's host cannot parse |
+| Symptom                                                                | Which claim was false                                                               |
+| ---------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| `x.findLast is not a function`, compiled clean                         | `lib` promised a standard library the runtime does not have                         |
+| `Cannot find name 'document'` — or worse, _no_ error in a Node service | `lib`, via a default nobody set                                                     |
+| `ERR_MODULE_NOT_FOUND` after a green build                             | `moduleResolution` modelled a different file-lookup algorithm than the runtime uses |
+| `Unexpected token` in a consumer's build                               | `target` emitted syntax the consumer's host cannot parse                            |
 
 The secondary objective is a habit rather than a fact: **check the value list
 against the compiler in front of you.** Two of these four options have had values
-*removed* recently — `es5` is no longer a legal `target`, and `node10` is no
+_removed_ recently — `es5` is no longer a legal `target`, and `node10` is no
 longer a legal `moduleResolution` — which quietly invalidates most published
 advice on the subject, including advice that is otherwise correct.
 

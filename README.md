@@ -1,4 +1,4 @@
-# Describing the host
+# Describing the runtime host
 
 A course on the four TypeScript compiler options that describe a runtime —
 `target`, `lib`, `module` and `moduleResolution` — and what happens when the
@@ -7,7 +7,7 @@ description is wrong.
 **Published at** <https://formica-fusca.github.io/typescript-host-model/>
 
 Four lines sit near the top of almost every `tsconfig.json`, and almost nobody
-chose them. They are read as a settings group about *output*, which is wrong for
+chose them. They are read as a settings group about _output_, which is wrong for
 half of them: flip `lib` between `es2015` and `esnext` and the emitted JavaScript
 is byte-identical. They are not build settings. They are a description of a
 machine that is not present, and the compiler believes every word of it.
@@ -63,11 +63,11 @@ Verified on **Node v24.18.0** and **TypeScript 7.0.2**.
 
 [`.github/workflows/ci.yml`](.github/workflows/ci.yml) runs three jobs:
 
-| Job | Does | Runs on |
-| --- | ---- | ------- |
-| `case-study` | `npm ci`, build, run, and the six assertions | every push and PR |
-| `build` | `astro check` then `astro build`, uploads the Pages artifact | every push and PR |
-| `deploy` | publishes to GitHub Pages | `main` only, after **both** of the above |
+| Job          | Does                                                         | Runs on                                  |
+| ------------ | ------------------------------------------------------------ | ---------------------------------------- |
+| `case-study` | `npm ci`, build, run, and the six assertions                 | every push and PR                        |
+| `build`      | `astro check` then `astro build`, uploads the Pages artifact | every push and PR                        |
+| `deploy`     | publishes to GitHub Pages                                    | `main` only, after **both** of the above |
 
 The deploy depends on the case study, not just the docs build. Publishing a site
 that documents commands which no longer run is the specific failure that
@@ -78,7 +78,7 @@ the two have drifted, which is the check worth having on a case study whose whol
 point is reproducibility.
 
 Node is pinned to `24.18.0` in CI rather than floating on `lts/*`. Two
-experiments assert *runtime* behaviour — that `Temporal` is absent, and that an
+experiments assert _runtime_ behaviour — that `Temporal` is absent, and that an
 ESM specifier is not extension-guessed — and a future release could move either.
 When that happens this repository should fail loudly, which is the same argument
 the course makes about `tsconfig.json`.
@@ -130,7 +130,7 @@ GitHub Pages must be set to **GitHub Actions** as its source
 `gh-pages` branch and no `PAT`; it uses the `github-pages` environment with
 `id-token: write`.
 
-Because this is a *project* page, the site is served from a sub-path, and
+Because this is a _project_ page, the site is served from a sub-path, and
 `astro.config.mjs` sets `base: "/typescript-host-model"` to match. Astro does not
 rewrite absolute links written by hand in markdown, so pages in
 `src/content/docs/` link to each other **relatively** — base-agnostic, and they
