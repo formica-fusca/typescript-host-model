@@ -63,11 +63,12 @@ The fix is not complicated; it is just a decision someone has to make:
 The case every earlier unit deferred, and it is the common one in real
 repositories.
 
-`domain-tools` type-checks with `tsc -b` under `module: nodenext` /
-`moduleResolution: nodenext`, and *publishes* through `tsup`, which bundles with
-esbuild for JavaScript and `rollup-plugin-dts` for declarations. The build exists
-for a good reason — an internal `private: true` package has to be inlined, and
-`tsc` emits one file per input and never inlines anything.
+Take a production monorepo. It type-checks with `tsc -b` under
+`module: nodenext` / `moduleResolution: nodenext`, and *publishes* through
+`tsup`, which bundles with esbuild for JavaScript and `rollup-plugin-dts` for
+declarations. The build exists for a good reason — an internal `private: true`
+package has to be inlined, and `tsc` emits one file per input and never inlines
+anything.
 
 So one source tree is read by two resolvers, and its host is described twice, in
 two languages:
@@ -102,10 +103,10 @@ the reconciliation rules chosen deliberately:
   makes that explicit and removes the chance of shipping the wrong artefact.
 - **Write the duplication down.** A comment in each file naming the other is the
   cheapest possible defence, and the only one that survives someone else editing
-  it. `domain-tools` does this: `tsup.config.ts` opens with a comment explaining
-  why `tsc` is not the builder, and `CLAUDE.md` warns that a green test run is no
-  evidence `dist` is current, because tests compile to a *different output
-  directory* than the one that ships.
+  it. The monorepo above does this: `tsup.config.ts` opens with a comment
+  explaining why `tsc` is not the builder, and `CLAUDE.md` warns that a green
+  test run is no evidence `dist` is current, because tests compile to a
+  *different output directory* than the one that ships.
 
 That last point generalises past this course and is worth stating plainly: **when
 two pipelines compile the same source, a green run of one says nothing about the
@@ -217,7 +218,5 @@ this course's.
 
 - [TSConfig reference](https://www.typescriptlang.org/tsconfig/)
 - [Node.js — Modules: Packages](https://nodejs.org/api/packages.html)
-- [`domain-tools`](https://github.com/formica-fusca/domain-tools) — the
-  two-hosts-one-tree example in §3, `tsup.config.ts` and `CLAUDE.md`.
 - All output in this unit produced with TypeScript 7.0.2 and 6.0.3 on Node
   24.18.0.

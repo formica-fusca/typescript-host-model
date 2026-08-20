@@ -117,6 +117,5 @@ Two details are deliberate:
 
 Built for the course
 [`typescript-host-model-target-lib-module-resolution`](../../). Experiment 1 is a
-real finding, not a constructed one: it was observed in
-[`domain-tools`](https://github.com/formica-fusca/domain-tools), whose Node-only
-packages type-check against the DOM for exactly this reason.
+real finding, not a constructed one: it was observed in a production monorepo
+whose Node-only packages type-check against the DOM for exactly this reason.

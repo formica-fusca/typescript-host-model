@@ -84,9 +84,9 @@ published to npm.
 "types": ["node"]
 ```
 
-This is a real config shape, not a constructed one. It is what
-`packages/state/tsconfig.json` in the `domain-tools` repository looks like, and
-the DOM observation was verified there before it was written here.
+This is a real config shape, not a constructed one. It is what a Node-only
+package's `tsconfig.json` looks like in a production monorepo, and the DOM
+observation was verified there before it was written here.
 </details>
 
 ## 4. Specimen B — the bundled app
@@ -241,6 +241,4 @@ and one config.
 ## References
 
 - [TSConfig reference](https://www.typescriptlang.org/tsconfig/)
-- Specimen A is adapted from `packages/state/tsconfig.json` in
-  [`domain-tools`](https://github.com/formica-fusca/domain-tools).
 - All output in this unit produced with TypeScript 7.0.2 on Node 24.18.0.

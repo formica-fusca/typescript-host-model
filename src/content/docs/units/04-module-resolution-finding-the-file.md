@@ -19,7 +19,7 @@ You wrote a string:
 
 ```ts
 import { d } from "./dep";
-import { State } from "@domain-tools/state";
+import { State } from "@acme/state";
 ```
 
 `moduleResolution` decides which file on disk each of those strings names. That
@@ -166,7 +166,7 @@ dropped it. `nodenext` is reporting Node's rule, at compile time, instead of
 letting you find it in production.
 
 Which resolves the question every newcomer asks about code like
-`packages/domain-tools/src/lib/entity.ts:1`:
+`packages/acme/src/lib/entity.ts:1`:
 
 ```ts
 import type { DomainEvent } from "./event-sourcing/domain-event.js";

@@ -154,8 +154,8 @@ invocation, not from memory. Several first-draft claims did not survive that
 check, and one — the behaviour of `@types` auto-inclusion — is recorded in
 unit `02` as an open question rather than an answer.
 
-The real-world specimen the course cites throughout is
-[`domain-tools`](https://github.com/formica-fusca/domain-tools).
+The real-world specimens the course cites throughout come from a production
+monorepo, which is not named here.
 
 ## Licence
 
