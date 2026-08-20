@@ -32,7 +32,18 @@ The prose and the code are separate on purpose. `src/content/docs/` is read;
 
 ## Running it
 
-The docs app:
+No install: **[open the repository in CodeSandbox](https://codesandbox.io/p/devbox/github/formica-fusca/typescript-host-model/main)** — a Linux VM with
+the real toolchain, which is what the case study needs (TypeScript 7 ships
+native binaries, so browser-based Node runtimes cannot run it).
+
+The environment is pinned in [`.devcontainer/devcontainer.json`](.devcontainer/devcontainer.json)
+— Node 24.18.0, both workspaces installed on create. CodeSandbox reads it, so
+does GitHub Codespaces (green **Code** button → *Codespaces*), so does VS Code
+locally (*Reopen in Container*). The version pin matters: two experiments
+assert runtime behaviour, so an environment on a different Node can legitimately
+produce different output from the one this course documents.
+
+Locally, the docs app:
 
 ```bash
 npm install

@@ -5,7 +5,10 @@ sidebar:
   order: 0
 ---
 
-The code lives in [`case-study/`](https://github.com/formica-fusca/typescript-host-model/tree/main/case-study) in this repository. Clone it and work it before reading the units.
+The code lives in [`case-study/`](https://github.com/formica-fusca/typescript-host-model/tree/main/case-study) in this repository. Work it before reading the units — either clone it, or
+**[open it in CodeSandbox](https://codesandbox.io/p/devbox/github/formica-fusca/typescript-host-model/main)**, which boots a Linux VM with the real
+toolchain rather than a browser emulation, so the results match the ones
+printed here.
 
 
 One package that describes a host correctly, one that describes several hosts

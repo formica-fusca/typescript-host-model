@@ -1,0 +1,24 @@
+{
+  "name": "typescript-host-model",
+
+  // A base image plus the Node feature, rather than a `javascript-node:24`
+  // image. That keeps ONE source of truth for the Node version, pinned to the
+  // exact patch every result in this course was verified against. A floating
+  // tag like `:24` would drift within 24.x without this file changing — the
+  // same failure mode the course describes for `"target": "esnext"`.
+  "image": "mcr.microsoft.com/devcontainers/base:bookworm",
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": { "version": "24.18.0" }
+  },
+
+  // Two workspaces, two lockfiles, on purpose: the docs app and the case study
+  // pin different TypeScript versions. `npm ci` rather than `npm install` so a
+  // drifted lockfile fails here too.
+  "postCreateCommand": "npm ci && npm --prefix case-study ci",
+
+  "customizations": {
+    "vscode": {
+      "extensions": ["astro-build.astro-vscode"]
+    }
+  }
+}
