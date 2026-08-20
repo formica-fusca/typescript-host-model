@@ -16,6 +16,17 @@
   // drifted lockfile fails here too.
   "postCreateCommand": "npm ci && npm --prefix case-study ci",
 
+  // `postCreateCommand` runs ONCE, when a container is created. Cloud IDEs
+  // optimise by cloning and resuming containers instead of creating them — a
+  // CodeSandbox fork inherits the parent's filesystem, so create-time setup
+  // never re-runs and a partial install propagates. This guard runs on every
+  // start and is a no-op when the install is intact.
+  //
+  // It checks for `@typescript/`, not `node_modules/`: TypeScript 7 splits into
+  // a Node shim (`.bin/tsc`) plus a per-platform native binary, and the failure
+  // actually observed was the shim present and every binary missing.
+  "postStartCommand": "test -d case-study/node_modules/@typescript || npm --prefix case-study ci",
+
   "customizations": {
     "vscode": {
       "extensions": ["astro-build.astro-vscode"]

@@ -33,6 +33,39 @@ function variant(id, { files, compilerOptions, type = "module" }) {
   return dir;
 }
 
+/**
+ * Fail loudly, once, if the toolchain is not usable — before any experiment runs.
+ *
+ * This exists because of a real failure: on a fresh cloud environment all six
+ * experiments failed with EMPTY results ("", "rejected — ", ".at() gone"), which
+ * is what `compile()` produced when tsc could not start. "tsc found no
+ * diagnostics" and "tsc never ran" are completely different facts and must never
+ * look alike. TypeScript 7 makes this easy to hit: `.bin/tsc` is a small Node
+ * shim that spawns a platform-specific native binary, so the shim can exist and
+ * be perfectly runnable while the binary it needs is absent.
+ */
+function assertToolchain() {
+  if (!existsSync(TSC)) {
+    throw new Error(
+      `tsc not found at ${TSC}\n` +
+        `The case study has its own lockfile. Run:  npm --prefix case-study ci`,
+    );
+  }
+  try {
+    const version = execFileSync(TSC, ["--version"], { encoding: "utf8", stdio: "pipe" }).trim();
+    return version;
+  } catch (e) {
+    const out = `${e.stdout ?? ""}${e.stderr ?? ""}`.trim();
+    throw new Error(
+      `tsc is installed but will not run.\n` +
+        `TypeScript 7 ships a native binary per platform; the usual cause is that\n` +
+        `the optional dependency for this platform (${process.platform}/${process.arch}) is missing.\n` +
+        `Try:  rm -rf case-study/node_modules && npm --prefix case-study ci\n\n` +
+        `exit=${e.status}\n${out || e.message}`,
+    );
+  }
+}
+
 /** Compile a variant. Returns { ok, codes } — codes are the TS error numbers. */
 function compile(dir) {
   try {
@@ -41,6 +74,11 @@ function compile(dir) {
   } catch (e) {
     const out = `${e.stdout ?? ""}${e.stderr ?? ""}`;
     const codes = [...new Set(out.match(/TS\d+/g) ?? [])];
+    // No diagnostics means this was not a type error — tsc itself failed.
+    // Surfacing it as an empty result would silently corrupt every experiment.
+    if (codes.length === 0) {
+      throw new Error(`tsc failed to run for ${dir}\nexit=${e.status}\n${out.trim() || e.message}`);
+    }
     return { ok: false, codes };
   }
 }
@@ -184,6 +222,7 @@ export const experiments = [
 ];
 
 export function runAll() {
+  assertToolchain();
   mkdirSync(WORK, { recursive: true });
   return experiments.map((e) => ({ ...e, result: e.run() }));
 }
