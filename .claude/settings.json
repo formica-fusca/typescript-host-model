@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -Rs '{hookSpecificOutput:{hookEventName:\"SessionStart\",additionalContext:.}}' \"${CLAUDE_PROJECT_DIR:-.}/.claude/hooks/session-start.md\"",
+            "timeout": 10,
+            "statusMessage": "Loading host-model tutor"
+          }
+        ]
+      }
+    ]
+  }
+}
